@@ -1,15 +1,17 @@
-function [R.G] = emp_risk(theta,X,Y,loss,ifClass)
+function [L,G,H] = emp_risk(theta,X,Y,loss)
 n = length(Y);
 l = zeros(n,1);
 for i = 1:n, 
     y = Y(i);
     x = X(i,:);
     eta = dot(theta,x);
-    if ifClass, % classification
-        l(i) = loss((2*y-1)*eta);
-    else % regression
-        l(i) = loss(eta-y);
-        g(i) = 
-    end
+    z = y * eta;
+    [l,g,h] = loss(y,eta);
+    LL(i) = l;
+    GG(i,:) = x.*g;
+    HH(i,:,:) = (x * x') .* h;
 end
+L = sum(LL)/n;
+G = sum(GG,1)./n;
+H = sum(HH,1)./n;
 end

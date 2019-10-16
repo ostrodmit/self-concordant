@@ -8,9 +8,9 @@ for i = 1:n,
         Y(i) = sign(eta);
     end
     if strcmp(key,'logistic'),
-        p = exp(eta)/(1 + exp(eta));
+        p = 1/(1 + exp(-eta));
         r = rand;
-        Y(i) = sign(r-p);
+        Y(i) = sign(p-r);
     end
 end
 end
