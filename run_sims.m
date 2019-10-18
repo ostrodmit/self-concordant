@@ -1,12 +1,12 @@
 d = 10;
-R = 10.0;
+R = 1.0;
 nn = uint16(logspace(1,3.5,30));
 N = 10000; % population size
 T = 10; % number of trials
 
 %% Generate population distribution
-% key = '0-1';
-key = 'logistic';
+key = '0-1';
+% key = 'logistic';
 pNoise = 0.2; % add classification noise
 theta_true = R * ones(d,1);
 [XX,YY] = generate_data_class(d,N,theta_true,key,pNoise); 

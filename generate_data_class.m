@@ -1,5 +1,7 @@
 function [X,Y] = generate_data_class(d,n,theta,key,pNoise) % generate data for classification
-X = randn(n,d);
+% X = randn(n,d); % Gaussian design
+% X = sign(randn(n,d)); % Rademacher design
+X = 2*(rand(n,d)-0.5); % Uniform on the unit cube
 Y = zeros(n,1);
 for i = 1:n,
     x = X(i,:);
