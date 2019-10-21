@@ -3,8 +3,8 @@ d = 2;
 R = 5.0;
 nn = uint16(logspace(2,4,31));
 N = 100000; % population size
-T_prior = 1;
-T_post = 4; % number of trials
+T_prior = 10;
+T_post = 20; % number of trials
 
 wb = waitbar(0,'Progress');
 
