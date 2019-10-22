@@ -1,21 +1,22 @@
+function [ave_excess_log,ave_excess_sc] = run_sims(xKey,yKey,d,R)
 tic;
-d = 2;
-R = 5.0;
-nn = uint16(logspace(2,4,31));
-N = 100000; % population size
-T_prior = 10;
-T_post = 20; % number of trials
+% d = 2;
+% R = 6;
+nn = uint16(logspace(2,3,3));
+N = 1e4; % population size
+T_prior = 1;
+T_post = 1; % number of trials
 
 wb = waitbar(0,'Progress');
 
 %% Population distribution parameters
 % xKey = 'Gaussian'; % Gaussian design
 % xKey = 'Rademacher'; % Rademacher design
-xKey = 'Hazan'; % adversarial distribution due to Hazan et al. (2014)
+% xKey = 'Hazan'; % adversarial distribution due to Hazan et al. (2014)
 pNoise = 0.0; % add label noise
 % yKey = '0-1'; % 0-1 labels
 % yKey = 'logistic'; % logistic labels
-yKey = 'ones';
+% yKey = 'ones';
 
 for t_prior = 1:T_prior,
     %% Generate population distribution
@@ -46,12 +47,12 @@ for t_prior = 1:T_prior,
     %% ERM fitting
     excess_log = zeros(T_prior,T_post,length(nn));
     excess_sc = zeros(T_prior,T_post,length(nn));
-    excess_apx = zeros(T_prior,T_post,length(nn));
+%     excess_apx = zeros(T_prior,T_post,length(nn));
     problem.x0 = zeros(d,1) + 0.01 * randn(d,1);
     nIdx = 0;
     for n = nn,
         nIdx = nIdx + 1;
-        waitbar((t_prior-1)*length(nn)+nIdx./(T_prior * length(nn)),wb);
+        waitbar(((t_prior-1)*length(nn)+nIdx)/(T_prior * length(nn)),wb);
         for t_post = 1:T_post,
             %% Generate training sample
             %
@@ -75,16 +76,21 @@ for t_prior = 1:T_prior,
         end
     end
 end
+close(wb)
 %% Excess risks averaged over T experiments
 T = T_prior * T_post;
-ave_excess_log = squeeze(sum(sum(excess_log,1)))./T;
-ave_excess_sc = squeeze(sum(sum(excess_sc,1)))./T;
-%% Plot them
+ave_excess_log = squeeze(sum(sum(excess_log,1),1))./T;
+size(ave_excess_log)
+ave_excess_sc = squeeze(sum(sum(excess_sc,1),1))./T;
+%% Save results
+mkdir './results'
+filename = ['./results/' xKey '-' yKey '-d-' num2str(d) '-R-' num2str(R) '.mat'];
+save(filename,'nn','ave_excess_log','ave_excess_sc');
+%% Plot results
 nn_double = double(nn);
 figure
 plot(log10(nn_double),log10(ave_excess_log),log10(nn_double),log10(ave_excess_sc));%,log10(nn_double),log(excess_apx));
 legend('logistic','SC');%,'transfer');
 xlabel('log(n)');
 ylabel('log(excessRisk)');
-close(wb)
 toc
