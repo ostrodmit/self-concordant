@@ -2,10 +2,10 @@ function [ave_excess_log,ave_excess_sc] = run_sims(xKey,yKey,d,R)
 tic;
 % d = 2;
 % R = 6;
-nn = uint16(logspace(2,3,3));
-N = 1e4; % population size
-T_prior = 1;
-T_post = 1; % number of trials
+nn = uint16(logspace(1,5,26));
+N = 1e5; % population size
+T_prior = 20;
+T_post = 40; % number of trials
 
 wb = waitbar(0,'Progress');
 
@@ -93,8 +93,8 @@ save(filename,'nn','ave_excess_log','ave_excess_sc');
 nn_double = double(nn);
 figure
 plot(log10(nn_double),...
-    log10(ave_excess_log),log10(nn_double),log10(ave_excess_sc));
-    %,log10(nn_double),log(excess_apx));
+    log10(ave_excess_log),log10(nn_double),log10(ave_excess_sc)); %,log10(nn_double),log(excess_apx));
+title(['R=' num2str(R)]);
 legend('logistic','SC');%,'transfer');
 xlabel('log(n)');
 ylabel('log(excessRisk)');
