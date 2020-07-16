@@ -41,9 +41,9 @@ for k = 1:length(ss)
 end
 
 
-%print('Excess risk for logistc loss')
+print('Excess risk for logistc loss')
 %pop_log(etheta_log)-pop_log(ptheta_log)
-%print('Excess risk for SC loss')
+print('Excess risk for SC loss')
 %pop_sc(etheta_sc)-pop_sc(ptheta_sc)
 %norm(theta_true-ptheta_log)
 %norm(theta_true-ptheta_sc)
@@ -85,7 +85,6 @@ length(ss)
 length(excess_log)
 
 close all
-loglog(ss,excess_log,'r')
-%plot(ss,excess_log,'r',ss,excess_sc,'b',ss,excess_log4sc,'g')
-%legend('log','sc','log4sc')
+plot(ss,excess_log,'r',ss,excess_sc,'b',ss,excess_log4sc,'g')
+legend('logistic','SC','logistic fro SC'})
 
