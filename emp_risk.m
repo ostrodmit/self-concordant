@@ -1,12 +1,11 @@
 function [L,G,H] = emp_risk(theta,X,Y,loss)
-[n,d] = size(X);
-LL = zeros(n,1);
-GG = zeros(n,d);
-HH = zeros(n,d,d);
+n = length(Y);
+l = zeros(n,1);
 for i = 1:n, 
     y = Y(i);
     x = X(i,:);
     eta = dot(theta,x);
+    z = y * eta;
     [l,g,h] = loss(y,eta);
     LL(i) = l;
     GG(i,:) = x.*g;
