@@ -1,21 +1,31 @@
-clear all
+clearvars
+rng(0,'twister'); % initialize random number generator
+wb = waitbar(0,'Processing...','WindowStyle','modal');
+
+%% Boundedline functions
+addpath('boundedline-pkg/boundedline');
+addpath('boundedline-pkg/singlepatch');
+addpath('boundedline-pkg/catuneven');
+addpath('boundedline-pkg/Inpaint_nans');
+
 d = 10;
 theta_true = ones(d,1);
 n = 100;
-N = 1000;
-
+N = 10000;
+T = 10;
 %% Logistic data, classification
 key = 'logistic';
 
-%% Generate data
-[XX,YY] = generate_data_class(d,N,theta_true,key); % population approximation
+%% Generate population
+[XX,YY] = generate_data_class(d,N,theta_true,key);
  
 %% Minimize empirical risk for logistic and SC losses
 options = optimoptions('fminunc');
 options.OptimalityTolerance = 1e-8;  
 options.Algorithm = 'quasi-newton';
+options.Display = 'none';
 options.SpecifyObjectiveGradient = true;
-x0 = 0.001 * randn(d,1);
+x0 = ones(d,1);
 %
 pop_log = @(theta)emp_risk(theta,XX,YY,@logistic);
 pop_sc = @(theta)emp_risk(theta,XX,YY,@sc_class);
@@ -24,42 +34,33 @@ pop_sc = @(theta)emp_risk(theta,XX,YY,@sc_class);
 [ptheta_sc,prisk_sc,~,~,egrad_sc] = fminunc(pop_sc,x0,options);
 
 % sample sizes
-ss = ceil(logspace(1,2.5,5))
+ss = ceil(logspace(log10(n),log10(N/2),20));
 
 for k = 1:length(ss)
-    m = ss(k)
-    strcat(int2str(k),'/',int2str(length(ss)))
-    Xm = XX(1:m,:);
-    Ym = YY(1:m,:);
-    emp_log = @(theta)emp_risk(theta,Xm,Ym,@logistic);
-    emp_sc = @(theta)emp_risk(theta,Xm,Ym,@sc_class);
-    [etheta_log,erisk_log,~,~,egrad_log] = fminunc(emp_log,x0,options);
-    [etheta_sc,erisk_sc,~,~,pgrad_sc] = fminunc(emp_sc,x0,options);
-    excess_log(k) =  pop_log(etheta_log)-pop_log(ptheta_log);
-    excess_sc(k) = pop_sc(etheta_sc)-pop_sc(ptheta_sc);
-    excess_log4sc(k) = pop_log(etheta_sc)-pop_log(ptheta_log);
+    % Sample size
+    m = ss(k);
+    % For T trials:
+    for t = 1:T
+    % Generate sample
+        [X,Y] = generate_data_class(d,m,theta_true,key);
+        emp_log = @(theta)emp_risk(theta,X,Y,@logistic);
+        emp_sc = @(theta)emp_risk(theta,X,Y,@sc_class);
+        [etheta_log,erisk_log,~,~,egrad_log] = fminunc(emp_log,x0,options);
+        [etheta_sc,erisk_sc,~,~,pgrad_sc] = fminunc(emp_sc,x0,options);
+        excess_log(k,t) =  log10(pop_log(etheta_log)-pop_log(ptheta_log));
+        excess_sc(k,t) = log10(pop_sc(etheta_sc) - pop_sc(ptheta_sc));
+        excess_log4sc(k,t) = log10(pop_log(etheta_sc) - pop_log(ptheta_log));
+    end
+    %% Compute means and stdev
+    waitbar(k/length(ss))
 end
-
-
-%print('Excess risk for logistc loss')
-%pop_log(etheta_log)-pop_log(ptheta_log)
-%print('Excess risk for SC loss')
-%pop_sc(etheta_sc)-pop_sc(ptheta_sc)
-%norm(theta_true-ptheta_log)
-%norm(theta_true-ptheta_sc)
-
-% etheta_log
-% emp_risk(theta_true,X,Y,@logistic)
-% erisk_log
-% norm(egrad_log)
-% norm(etheta_log-theta_true)
-%
-% [etheta_sc,erisk_sc] = fminunc(problem);
-
-% erisk_log 
-% erisk_sc
-
-%gscatter(X(:,1),X(:,2),Y(:));
+close(wb)
+mean_excess_log = mean(excess_log,2);
+mean_excess_sc = mean(excess_sc,2);
+mean_excess_log4sc = mean(excess_log4sc,2);
+dev_excess_log = std(excess_log,1,2)/sqrt(T);
+dev_excess_sc = std(excess_sc,1,2)/sqrt(T);
+dev_excess_log4sc = std(excess_log4sc,1,2)/sqrt(T);
 
 ifPlotLosses = 0;
 if ifPlotLosses
@@ -80,12 +81,14 @@ if ifPlotLosses
 end
 
 % Plot excess risks
-
-length(ss)
-length(excess_log)
-
 close all
-loglog(ss,excess_log,'r')
-%plot(ss,excess_log,'r',ss,excess_sc,'b',ss,excess_log4sc,'g')
-%legend('log','sc','log4sc')
-
+%loglog(ss,excess_log,'r')
+%loglog(ss,mean_excess_log,'r',ss,mean_excess_sc,'b',ss,mean_excess_log4sc,'g')
+ssizes = log10(1:length(ss));
+curves = boundedline(...
+    log10(ss),mean_excess_log,dev_excess_log,'r',...
+    log10(ss),mean_excess_sc,dev_excess_sc,'b',...
+    log10(ss),mean_excess_log4sc,dev_excess_log4sc,'g',...
+    'alpha');
+axis tight;
+legend('log','sc','log4sc')
