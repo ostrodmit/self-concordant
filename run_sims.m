@@ -1,4 +1,5 @@
-clearvars
+function [fname] = run_sims(d,n,N,T,xKey,yKey)
+clearvars -except d n N T xKey yKey
 rng(0,'twister'); % initialize random number generator
 wb = waitbar(0,'Processing...','WindowStyle','modal');
 
@@ -8,16 +9,21 @@ addpath('boundedline-pkg/singlepatch');
 addpath('boundedline-pkg/catuneven');
 addpath('boundedline-pkg/Inpaint_nans');
 
-d = 10;
-theta_true = ones(d,1);
-n = 100;
-N = 10000;
-T = 10;
+% d = 10;
+% n = 100;
+% N = 10000;
+% T = 10;
+
+% R = sqrt(d);
+R = 12;
+
+theta_true = R * ones(d,1) / sqrt(d);
 %% Logistic data, classification
-key = 'logistic';
+% xKey = 'Gaussian';
+% yKey = 'logistic';
 
 %% Generate population
-[XX,YY] = generate_data_class(d,N,theta_true,key);
+[XX,YY] = generate_data_class(d,N,theta_true,xKey,yKey);
  
 %% Minimize empirical risk for logistic and SC losses
 options = optimoptions('fminunc');
@@ -30,11 +36,12 @@ x0 = ones(d,1);
 pop_log = @(theta)emp_risk(theta,XX,YY,@logistic);
 pop_sc = @(theta)emp_risk(theta,XX,YY,@sc_class);
 
+
 [ptheta_log,prisk_log,~,~,pgrad_log] = fminunc(pop_log,x0,options);
 [ptheta_sc,prisk_sc,~,~,egrad_sc] = fminunc(pop_sc,x0,options);
 
 % sample sizes
-ss = ceil(logspace(log10(n),log10(N/2),20));
+ss = ceil(logspace(log10(n),log10(N),20));
 
 for k = 1:length(ss)
     % Sample size
@@ -42,7 +49,7 @@ for k = 1:length(ss)
     % For T trials:
     for t = 1:T
     % Generate sample
-        [X,Y] = generate_data_class(d,m,theta_true,key);
+        [X,Y] = generate_data_class(d,m,theta_true,xKey,yKey);
         emp_log = @(theta)emp_risk(theta,X,Y,@logistic);
         emp_sc = @(theta)emp_risk(theta,X,Y,@sc_class);
         [etheta_log,erisk_log,~,~,egrad_log] = fminunc(emp_log,x0,options);
@@ -55,40 +62,13 @@ for k = 1:length(ss)
     waitbar(k/length(ss))
 end
 close(wb)
-mean_excess_log = mean(excess_log,2);
-mean_excess_sc = mean(excess_sc,2);
-mean_excess_log4sc = mean(excess_log4sc,2);
-dev_excess_log = std(excess_log,1,2)/sqrt(T);
-dev_excess_sc = std(excess_sc,1,2)/sqrt(T);
-dev_excess_log4sc = std(excess_log4sc,1,2)/sqrt(T);
 
-ifPlotLosses = 0;
-if ifPlotLosses
-    %% Plot losses
-    z = linspace(-5,5,50);
-    % plot sc_class vs. logistic
-    figure
-    [l1,g1,h1] = sc_class(1,z);
-    [l2,g2,h2] = logistic(1,z);
-    plot(z,l1,z,l2);
-    figure
-    plot(z,g1,z,g2);
-    figure
-    plot(z,h1,z,h2);
-    % plot sc_robust vs. logcosh vs. huber
-    % figure
-    % plot(z,sc_robust(abs(z)),z,huber(abs(z)),z,logcosh(z))
+%% Save results in a file
+respath = ['./data/' xKey '-' yKey '/'];
+if ~exist(respath, 'dir'),
+  mkdir(respath);
 end
-
-% Plot excess risks
-close all
-%loglog(ss,excess_log,'r')
-%loglog(ss,mean_excess_log,'r',ss,mean_excess_sc,'b',ss,mean_excess_log4sc,'g')
-ssizes = log10(1:length(ss));
-curves = boundedline(...
-    log10(ss),mean_excess_log,dev_excess_log,'r',...
-    log10(ss),mean_excess_sc,dev_excess_sc,'b',...
-    log10(ss),mean_excess_log4sc,dev_excess_log4sc,'g',...
-    'alpha');
-axis tight;
-legend('log','sc','log4sc')
+addpath(respath);
+fname = [respath 'd-' num2str(d) '_N-' num2str(N) '_T-' num2str(T) '.mat'];
+% if exist(statfile, 'file')==2, delete(statfile); end
+save(fname,'ss','T','excess_log','excess_sc','excess_log4sc','-v7.3');
