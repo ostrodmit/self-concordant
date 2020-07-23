@@ -29,7 +29,7 @@ theta_true = R * ones(d,1) / sqrt(d);
 options = optimoptions('fminunc');
 options.OptimalityTolerance = 1e-8;  
 options.Algorithm = 'quasi-newton';
-options.Display = 'none';
+options.Display = 'notify-detailed';
 options.SpecifyObjectiveGradient = true;
 x0 = ones(d,1);
 %
