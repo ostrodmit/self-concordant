@@ -27,8 +27,8 @@ function [] = treat_fig(curves,gca,gcf,xKey,yKey,fname)
 axis tight;
 sfont = 6;
 legend(curves,{'logistic' 'self-conc' 'calibrated'},'Location','southwest','interpreter','latex','FontSize',4*sfont);
-xlabel('$\log(n)$','interpreter','latex','fontsize',5*sfont); 
-ylabel('$\log$(excess risk)','interpreter','latex','fontsize',5*sfont); 
+xlabel('$\lg n$','interpreter','latex','fontsize',5*sfont); 
+ylabel('$\lg$(excess risk)','interpreter','latex','fontsize',5*sfont); 
 set(gca,'FontSize',4*sfont);
 set(gca,'XMinorTick','on');
 set(gca,'YMinorTick','on');
