@@ -22,10 +22,11 @@ theta_true = R * ones(d,1) / sqrt(d);
  
 %% Minimize empirical risk for logistic and SC losses
 options = optimoptions('fmincon');
-options.OptimalityTolerance = 1e-8;  
+options.OptimalityTolerance = 1e-6;  
 %options.Algorithm = 'quasi-newton'; % for fminunc
 options.Algorithm = 'sqp';
-options.Display = 'notify-detailed';
+% options.Display = 'notify-detailed';
+options.Display = 'none';
 options.SpecifyObjectiveGradient = true;
 %
 nonlcon = @(theta)l2normcon(theta,2*R); % norm constraint for better convergence
@@ -41,7 +42,7 @@ pop_sc = @(theta)emp_risk(theta,XX,YY,@sc_class);
 [],[],[],[],[],[],nonlcon,options);
 
 % sample sizes
-ss = ceil(logspace(lg_n_min,lg_n_max,41));
+ss = ceil(logspace(lg_n_min,lg_n_max,61));
 
 for t = 1:T
     % Sample size
