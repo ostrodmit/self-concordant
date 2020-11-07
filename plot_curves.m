@@ -48,5 +48,6 @@ if ~exist(figspath, 'dir')
 end
 %print('-depsc',[figspath fname '.eps']);
 % if exist(statfile, 'file')==2, delete(statfile); end
-saveas(gcf,[figspath fname '.pdf'],'pdf');
+%saveas(gcf,[figspath fname '.pdf'],'pdf');
+export_fig(gcf,[figspath fname '.pdf'],'-dpdf','-r0');
 end
