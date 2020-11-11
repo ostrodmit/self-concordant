@@ -42,7 +42,7 @@ pop_sc = @(theta)emp_risk(theta,XX,YY,@sc_class);
 [],[],[],[],[],[],nonlcon,options);
 
 % sample sizes
-ss = ceil(logspace(lg_n_min,lg_n_max,61));
+ss = ceil(logspace(lg_n_min,lg_n_max,(lg_n_max-lg_n_min)*20+1));
 
 for t = 1:T
     % Sample size
