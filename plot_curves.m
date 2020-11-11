@@ -25,6 +25,7 @@ end
 function [] = treat_fig(curves,gca,gcf,xKey,yKey,fname)
 %% Ticks, legend, etc. -- some magic settings
 axis tight;
+% xlim([2 4])
 sfont = 6;
 legend(curves,{'logistic' 'self-conc' 'calibrated'},'Location','southwest','interpreter','latex','FontSize',4*sfont);
 xlabel('$\lg n$','interpreter','latex','fontsize',5*sfont); 
@@ -46,8 +47,15 @@ figspath = ['./figs/' xKey '-' yKey '/'];
 if ~exist(figspath, 'dir')
   mkdir(figspath);
 end
-%print('-depsc',[figspath fname '.eps']);
+% print('-dpdf',[figspath fname '.pdf'],'-r0','-painters');
+% print('-depsc',[figspath fname '.eps'],'-painters');
 % if exist(statfile, 'file')==2, delete(statfile); end
-%saveas(gcf,[figspath fname '.pdf'],'pdf');
-export_fig(gcf,[figspath fname '.pdf'],'-dpdf','-r0');
+saveas(gcf,[figspath fname '.fig'],'fig');
+saveas(gcf,[figspath fname '-preview.pdf'],'pdf');
+
+% Save to Dropbox as well
+saveas(gcf,['~/Dropbox/self-concordant/EJS/v1/figs/' xKey '-' yKey '/' fname '.fig'],'fig');
+saveas(gcf,['~/Dropbox/self-concordant/EJS/v1/figs/' xKey '-' yKey '/' fname '-preview.pdf'],'pdf');
+%
+% saveas(gcf,[figspath fname '.pdf'],'pdf','-fillpage');
 end
