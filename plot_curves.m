@@ -3,9 +3,16 @@ close all
 clearvars -except xKey yKey fname
 datapath = ['./data/' xKey '-' yKey '/'];
 load([datapath fname '.mat'],'ss','T','excess_log','excess_sc','excess_log4sc')
-mean_excess_log = mean(excess_log,2);
-mean_excess_sc = mean(excess_sc,2);
+
+excess_log(isinf(excess_log)) = NaN;
+mean_excess_log = nanmean(excess_log,2);
+
+excess_sc(isinf(excess_sc)) = NaN;
+mean_excess_sc = nanmean(excess_sc,2);
+
+excess_log4sc(isinf(excess_log4sc)) = NaN;
 mean_excess_log4sc = mean(excess_log4sc,2);
+
 dev_excess_log = 3*std(excess_log,1,2)/sqrt(T);
 dev_excess_sc = 3*std(excess_sc,1,2)/sqrt(T);
 dev_excess_log4sc = 3*std(excess_log4sc,1,2)/sqrt(T);
