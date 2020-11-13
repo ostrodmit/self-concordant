@@ -21,7 +21,6 @@ One may also explore additional scenarios (not reported in the paper due to spac
 They control the scenario for the design and conditional distribution of the label and take the following values:  
 ``xKey``: ``'Gauss'``, ``'Hazan'`` or ``'Rademacher'``;   
 ``yKey``: ``'always-1'``, ``'0-1'``, ``'logistic'``, ``'ill-spec'`` or ``'probit'``.  
-We do not report the entirety of these results 
 
 Here, ``Rademacher`` stands for the design with i.i.d. fair Bernoulli entries. 
 ``yKey`` specifies the conditional distribution of <img src="https://render.githubusercontent.com/render/math?math=Y\in\{\pm 1\}"> 
