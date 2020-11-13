@@ -17,7 +17,7 @@ change the number of Monte-Carlo trials: parameter ``T`` in ``run_exp_gauss.m`` 
 
 ##
 
-One may also explore additional scenarios (not reported in the paper due to space limitations) by changing ``xKey`` and ``yKey`` parameters in ``generate_data_class.m``. 
+One may also explore additional scenarios (not reported in the paper due to space limitations) by changing ``xKey`` and ``yKey`` variables in ``generate_data_class.m``. 
 They control the scenario for the design and conditional distribution of the label and take the following values:  
 ``xKey``: ``'Gauss'``, ``'Hazan'`` or ``'Rademacher'``;   
 ``yKey``: ``'always-1'``, ``'0-1'``, ``'logistic'``, ``'ill-spec'`` or ``'probit'``.  
