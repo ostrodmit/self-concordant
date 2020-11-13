@@ -1,4 +1,4 @@
-# Finite-sample analysis of M-estimators using self-concordance
+# Finite-sample analysis of M-estimators  using self-concordance
 
 Matlab implementation of numerical experiments from the paper
 
