@@ -1,8 +1,8 @@
-# Finite-sample analysis of M-estimators  using self-concordance
+# Finite-sample analysis of M-estimators using self-concordance
 
 Matlab implementation of numerical experiments from the paper
 
-[Dmitrii M. Ostrovskii, Francis Bach. Finite-sample analysis of M-estimators using Self-Concordance](https://arxiv.org/abs/1810.06838)
+[Dmitrii M. Ostrovskii, Francis Bach. Finite-sample analysis of M-estimators using self-concordance](https://arxiv.org/abs/1810.06838)
 
 To run the experiments, clone or download the repository and launch the following MATLAB commands: 
 ```
@@ -17,10 +17,11 @@ change the number of Monte-Carlo trials: parameter ``T`` in ``run_exp_gauss.m`` 
 
 ##
 
-One may also explore additional scenarios by changing ``xKey`` and ``yKey`` parameters, corresponding to the scenarios for design and label: 
+One may also explore additional scenarios (not reported in the paper due to space limitations) by changing ``xKey`` and ``yKey`` parameters in ``generate_data_class.m``. 
+They control the scenario for the design and conditional distribution of the label and take the following values:  
 ``xKey``: ``'Gauss'``, ``'Hazan'`` or ``'Rademacher'``;   
 ``yKey``: ``'always-1'``, ``'0-1'``, ``'logistic'``, ``'ill-spec'`` or ``'probit'``.  
-We do not report the entirety of these results in the paper due to space limitations.  
+We do not report the entirety of these results 
 
 Here, ``Rademacher`` stands for the design with i.i.d. fair Bernoulli entries. 
 ``yKey`` specifies the conditional distribution of <img src="https://render.githubusercontent.com/render/math?math=Y\in\{\pm 1\}"> 
