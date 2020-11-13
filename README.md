@@ -10,7 +10,7 @@ run_exp_gauss
 run_exp_hazan
 ```
 The data for the curves will appear in ``data/<...>``, where ``<...>`` corresponds to the experiment: ``Gauss-logistic`` and ``Hazan-always-1``.
-Plots will appear in similar subfolders in ``plots/<...>``. 
+Plots will appear in similar subfolders in ``figs/<...>``. 
 
 The experiments that reproduce the curves reported in the paper take a few days to run. To obtain (less accurate) results faster,
 change the number of Monte-Carlo trials: parameter ``T`` in ``run_exp_gauss.m`` and ``run_exp_hazan.m``. 
