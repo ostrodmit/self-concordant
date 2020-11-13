@@ -19,6 +19,7 @@ change the number of Monte-Carlo trials: parameter ``T`` in ``run_exp_gauss.m`` 
 
 One may also explore additional scenarios (not reported in the paper due to space limitations) by changing ``xKey`` and ``yKey`` variables in ``generate_data_class.m``. 
 They control the scenario for the design and conditional distribution of the label and take the following values:  
+
 ``xKey``: ``'Gauss'``, ``'Hazan'`` or ``'Rademacher'``;   
 ``yKey``: ``'always-1'``, ``'0-1'``, ``'logistic'``, ``'ill-spec'`` or ``'probit'``.  
 
@@ -29,4 +30,4 @@ given <img src="https://render.githubusercontent.com/render/math?math=\eta=X^\to
 ``'logistic'``: <img src="https://render.githubusercontent.com/render/math?math=\mathbb{P}[Y=1] \sim \exp(\tfrac{1}{2}\eta)">;  
 ``'ill-spec'``: <img src="https://render.githubusercontent.com/render/math?math=\mathbb{P}[Y=1] \sim \exp(\tfrac{1}{2}\eta\cos(\eta))">;  
 ``'probit'``: <img src="https://render.githubusercontent.com/render/math?math=\mathbb{P}[Y=1]=1-\phi(\eta)">, where 
-<img src="https://render.githubusercontent.com/render/math?math=\phi"> is the standard Gaussian c.d.f.  
+<img src="https://render.githubusercontent.com/render/math?math=\phi"> is the standard Gaussian c.d.f.
