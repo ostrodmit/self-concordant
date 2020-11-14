@@ -9,7 +9,7 @@ To run the experiments, clone or download the repository and launch the followin
 run_exp_gauss
 run_exp_hazan
 ```
-The data for the curves will appear in ``data/<...>``, where ``<...>`` corresponds to the experiment: ``Gauss-logistic`` and ``Hazan-always-1``.
+The data for the curves will appear in ``data/<...>``, where ``<...>`` corresponds to the experiment: ``Gauss-logistic``, ``Gauss-probit`` and ``Hazan-always-1``.
 Plots will appear in similar subfolders in ``figs/<...>``. 
 
 The experiments that reproduce the curves reported in the paper take a few days to run. To obtain (less accurate) results faster,
