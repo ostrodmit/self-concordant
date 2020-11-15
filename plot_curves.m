@@ -60,9 +60,9 @@ end
 saveas(gcf,[figspath fname '.fig'],'fig');
 saveas(gcf,[figspath fname '-preview.pdf'],'pdf');
 
-% Save to Dropbox as well
-saveas(gcf,['~/Dropbox/self-concordant/EJS/v1/figs/' xKey '-' yKey '/' fname '.fig'],'fig');
-saveas(gcf,['~/Dropbox/self-concordant/EJS/v1/figs/' xKey '-' yKey '/' fname '-preview.pdf'],'pdf');
+% % Save to Dropbox as well
+% saveas(gcf,['~/Dropbox/self-concordant/EJS/v1/figs/' xKey '-' yKey '/' fname '.fig'],'fig');
+% saveas(gcf,['~/Dropbox/self-concordant/EJS/v1/figs/' xKey '-' yKey '/' fname '-preview.pdf'],'pdf');
 %
 % saveas(gcf,[figspath fname '.pdf'],'pdf','-fillpage');
 end

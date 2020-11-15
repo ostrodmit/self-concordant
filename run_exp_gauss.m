@@ -4,20 +4,20 @@ N = 1e4;
 R = 1;
 dd = [8, 16, 32];
 ddd = [64];
-tic;
-% yKey = 'logistic';
-for yKey = ['ill-spec','probit']
+% yKey = ;
+for yKey = {'logistic','probit'}
+    tic;
     T = 400;
     for d = dd
-        gauss=run_sims(R,d,lg_n_min,lg_n_max,N,T,xKey,yKey);
-        plot_curves(xKey,yKey,gauss);
+        gauss=run_sims(R,d,lg_n_min,lg_n_max,N,T,xKey,yKey{1});
+        plot_curves(xKey,yKey{1},gauss);
     end
     toc
     tic;
     T = 200;
     for d = ddd
-        gauss=run_sims(R,d,lg_n_min,lg_n_max,N,T,xKey,yKey);
-        plot_curves(xKey,yKey,gauss);
+        gauss=run_sims(R,d,lg_n_min,lg_n_max,N,T,xKey,yKey{1});
+        plot_curves(xKey,yKey{1},gauss);
     end
+    toc
 end
-toc
